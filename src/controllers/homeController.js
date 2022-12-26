@@ -1,3 +1,4 @@
+import { response } from 'express';
 import db from '../models/index';
 import CRUDService from '../services/CRUDService';
 let getHomePage = async (req, res) => {
@@ -27,9 +28,6 @@ let postCRUD = async(req, res) => {
 
 let displayGetCRUD = async(req, res) => {
     let data = await CRUDService.getAllUser();
-    console.log('------------------------------------------------')
-    console.log(data)
-    console.log('------------------------------------------------')
     return res.render('displayCRUD.ejs', {
         dataTable: data
     });
@@ -60,6 +58,17 @@ let putCRUD = async(req,res) => {
     });
 }
 
+let deleteCRUD = async(req,res) => {
+    let id = req.query.id;
+    if(id){
+        await CRUDService.deleteUserById(id);
+        return res.send('Delete user succeed!')
+    }
+    else{
+        return res.send('Not found user!')
+    }
+}
+
 module.exports = {
     getHomePage: getHomePage,
     getAboutPage: getAboutPage,
@@ -67,5 +76,6 @@ module.exports = {
     postCRUD: postCRUD,
     displayGetCRUD: displayGetCRUD,
     getEditCRUD: getEditCRUD,
-    putCRUD: putCRUD
+    putCRUD: putCRUD,
+    deleteCRUD: deleteCRUD
 }
